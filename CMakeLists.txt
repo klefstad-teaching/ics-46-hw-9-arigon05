@@ -11,6 +11,9 @@ set(DIJKSTRAS_SRC_FILES
   src/dijkstras.cpp
 )
 
+add_compile_options("-fsanitize=address,undefined")
+link_libraries("-fsanitize=address,undefined")
+
 add_executable(dijkstra_main
   ${DIJKSTRAS_SRC_FILES}
   src/dijkstras_main.cpp
