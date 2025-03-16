@@ -8,27 +8,31 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
         return false; 
     }
 
-    int diff_count = 0
+    int differences_count = 0
     int i = 0, j = 0;
 
     while (i < len1 && j < len2) {
         if (str1[i] != str2[j]) {
-            diff_count++;
-            if (diff_count > d){
+            differences_count++;
+            if (differences_count > d){
                 return false;
             }
 
-            if (len1 > len2) i++;      
-            else if (len1 < len2) j++; 
-            else { i++; j++; }         
+            if (len1 > len2) i++;  //deletion in str 1
+            else if (len1 < len2) j++; //insertion in str 1
+            else { i++; j++; }   //replacement  
         }
         else {
             i++;
             j++;
-        }
+        } //continues on if the characters match
     }
 
-    return diff_count <= d;
+    if (i < len1 || j < len2) {
+        differences++;
+    }
+
+    return differences_count == d;
 }
 
 bool is_adjacent(const string& word1, const string& word2){
@@ -41,11 +45,7 @@ void error(string word1, string word2, string msg){
 
 vector<string> generate_word_ladder(const string& begin_word, const string& end_word, const set<string>& word_list){
     if (begin_word == end_word) {
-        error("Start and end words must be different.");
-        return {};
-    }
-    if (word_list.find(end_word) == word_list.end()) {
-        error("Error: End word is not in the dictionary.");
+        error(begin_word, end_word, "Start and end words must be different.");
         return {};
     }
 
@@ -92,7 +92,7 @@ void load_words(set<string> & word_list, const string& file_name){
 
 void print_word_ladder(const vector<string>& ladder){
     if (ladder.empty()) {
-        error("No ladder found.");
+        error(" ", " ", "No ladder found.");
         return;
     }
     for (size_t i = 0; i < ladder.size(); ++i) {
@@ -103,4 +103,36 @@ void print_word_ladder(const vector<string>& ladder){
 
 void verify_word_ladder(){
     
+    set<string> word_list;
+    load_words(word_list, "../src/words.txt");
+
+    string begin_word, end_word;
+    cout << "Enter start word: ";
+    cin >> begin_word;
+    cout << "Enter end word: ";
+    cin >> end_word;
+    vector<string> ladder = generate_word_ladder(begin_word, end_word, word_list);
+
+    if (ladder.empty()) {
+        cout << "No valid word ladder found.\n";
+        return;
+    }
+
+    print_word_ladder(ladder);
+
+    for (size_t i = 1; i < ladder.size(); ++i) {
+        if (word_list.find(ladder[i]) == word_list.end()) {
+            cout << "Invalid word ladder: '" << ladder[i] << "' is not a dictionary word.\n";
+            return;
+        }
+    }
+
+    for (size_t i = 1; i < ladder.size(); ++i) {
+        if (!is_adjacent(ladder[i - 1], ladder[i])) {
+            cout << "Invalid word ladder: '" << ladder[i - 1] << "' → '" << ladder[i] << "' is not a valid step.\n";
+            return;
+        }
+    }
+
+     cout << "Word ladder verified successfully!\n";
 }

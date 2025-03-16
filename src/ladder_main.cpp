@@ -1,3 +1,5 @@
 int main(){
-    return -1;
+    verify_word_ladder();
+
+    return 0;
 }
