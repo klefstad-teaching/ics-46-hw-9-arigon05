@@ -1,14 +1,14 @@
 #include "ladder.h"
 
 bool edit_distance_within(const std::string& str1, const std::string& str2, int d){
-    int len1 = str1.size()
+    int len1 = str1.size();
     int len2 = str2.size();
 
     if (abs(len1 - len2) > d) {
         return false; 
     }
 
-    int differences_count = 0
+    int differences_count = 0;
     int i = 0, j = 0;
 
     while (i < len1 && j < len2) {
@@ -29,7 +29,7 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
     }
 
     if (i < len1 || j < len2) {
-        differences++;
+        differences_count++;
     }
 
     return differences_count == d;
@@ -40,7 +40,7 @@ bool is_adjacent(const string& word1, const string& word2){
 }
 
 void error(string word1, string word2, string msg){
-    std::cout << "ERROR in " << word1 << " and " << word 2 << " " << msg << std::endl;
+    std::cout << "ERROR in " << word1 << " and " << word2 << " " << msg << std::endl;
 }
 
 vector<string> generate_word_ladder(const string& begin_word, const string& end_word, const set<string>& word_list){
@@ -76,7 +76,7 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
             }
         }
     }
-    return{} // empty ladder
+    return{}; // empty ladder
 
 }
 
